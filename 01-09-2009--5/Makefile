@@ -7,7 +7,10 @@ GTKFLAGS = `pkg-config gtkmm-2.4 --cflags --libs`
 
 CC = g++
 
-archivos = $(filter-out main.cpp test.cpp, $(wildcard *.cpp))
+#EN ESTA VARIABLE VAN TODAS LAS DEPENDENCIAS QUE TENGAN UN MAIN Y SE QUIERAN COMPILAR
+TARGETS = ej8.cpp
+
+archivos = $(filter-out $(targets), $(wildcard *.cpp))
 
 # EN ESTA VARIABLE SE DEFINEN TODAS LAS CARPETAS QUE TENGAN .H
 # EXTERNOS QUE ESTEN USANDO
@@ -29,10 +32,10 @@ old := $(LD)
 ifdef verbose
 RM := $(RM) -v
 else
-CC =  @echo "  Compilando  $@"; $(occ)
-CXX = @echo "  CXX $@"; $(ocxx)
-RM =  @echo "  CLEAN"; $(orm)
-LD =  @echo "  LD  $@"; $(old)
+#CC =  @echo "  Compilando  $@"; $(occ)
+#CXX = @echo "  CXX $@"; $(ocxx)
+#RM =  @echo "  CLEAN"; $(orm)
+#LD =  @echo "  LD  $@"; $(old)
 endif
 
 COMP_DEPEND = @echo "Compilar dependencias externas..."
@@ -41,17 +44,19 @@ LIMPIAR = @echo "Limpiando..."
 #########################################
 
 
-all: binaries
+all: targets
 
 binaries: $(bin)
 
 %.o: %.cpp
 	$(CC) $(CXXFLAGS) $(I-INCLUDES) -c $< $(GTKFLAGS)
 
-test: $(bin)
-	$(CC) $(CXXFLAGS) $(bin) $(GTKFLAGS) main.cpp  -o test
+targets: $(TARGETS)
+
+$(TARGETS):
+	$(CC) $(CXXFLAGS) $(I-INCLUDES) $@ -o $(@:.cpp= ) $(GTKFLAGS)
 
 clean:
 	$(LIMPIAR); rm -f $(robjs)
 
-.PHONY: clean all binaries
+.PHONY: clean all binaries targets $(TARGETS)
