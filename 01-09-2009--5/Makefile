@@ -8,7 +8,7 @@ GTKFLAGS = `pkg-config gtkmm-2.4 --cflags --libs`
 CC = g++
 
 #EN ESTA VARIABLE VAN TODAS LAS DEPENDENCIAS QUE TENGAN UN MAIN Y SE QUIERAN COMPILAR
-TARGETS = ej8.cpp
+TARGETS = $(wildcard ej*.cpp)
 
 archivos = $(filter-out $(targets), $(wildcard *.cpp))
 
