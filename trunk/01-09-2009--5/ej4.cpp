@@ -14,9 +14,9 @@ private:
 	}
 	// struct que tiene la informacion de pthread
 	pthread_t thread;
-	
+	bool cr; 	
 public:
-	Thread(): corriendo(false){}
+	Thread(): cr(false){}
 	
 	virtual ~Thread() {}
 	
@@ -27,12 +27,12 @@ public:
 	// 3) puntero a la funcion de callbak que va a llamar
 	// 4) argumento que recibira la funcion de callback
 	void iniciar() {
-		corriendo = true;
-		pthread_create(thread, 0, Thread::callback, this);
+		cr = true;
+		pthread_create(&thread, 0, Thread::callback, this);
 	}
 	
 	void detener() {
-		corriendo = false;
+		cr = false;
 	}
 	
 	// Este metodo sincroniza los hilos
@@ -45,7 +45,7 @@ public:
 	}
 	
 	bool corriendo() {
-		return corriendo;
+		return cr;
 	}
 };
 
@@ -54,7 +54,7 @@ class Producer : public Thread {
 // ColaBloqueante& cola;
 // que seria una referencia a una cola compartida entre el Producer y el Consumer
 public:
-	void run() {
+	void correr() {
 		while (corriendo()) {
 			// aca haria cosas que luego encolaria
 			// por ejemplo, espero cosas de un socket
@@ -68,7 +68,7 @@ class Consumer : public Thread {
 // ColaBloqueante& cola;
 // que seria una referencia a una cola compartida entre el Producer y el Consumer
 public:
-	void run() {
+	void correr() {
 		while (corriendo()) {
 			// aca estaria esperando a que haya elementos en una
 			// cola
@@ -77,3 +77,29 @@ public:
 		}
 	}
 };
+
+int main(int argc, char** argv) {
+	// ahora vemos el uso apropiado
+	Producer producer;
+	Consumer consumer;
+
+	// Asi inicio los hilos. Esto hace que se haga el llamado a iniciar de
+	// Thread, llamando a la funcion de callback. Notar que el correr() es
+	// polimorfico
+	producier->iniciar();
+	consumer->iniciar();
+
+	// Esta linea detiene los hilos PERO NO LOS SINCRONIZA. Lo unico que
+	// hace es detener la ejecucion de su hilo principal, pero siguen
+	// abiertos los recursos.
+	producer->detener();
+	consumer->detener();
+
+	// En estas lineas se sincronizan los hilos al hilo principal. Es el
+	// analogo a cerrar un archivo. Es de tener en cuenta que si los hilos
+	// no se detuvieron, el sincronizar va a esperar a que terminen con su
+	// tarea y luego sincronizara. Es bloqueante.
+	producer->sincronizar();
+	consumer->sincronizar();
+	return 0;
+}
