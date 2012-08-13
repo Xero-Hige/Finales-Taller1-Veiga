@@ -86,20 +86,20 @@ int main(int argc, char** argv) {
 	// Asi inicio los hilos. Esto hace que se haga el llamado a iniciar de
 	// Thread, llamando a la funcion de callback. Notar que el correr() es
 	// polimorfico
-	producier->iniciar();
-	consumer->iniciar();
+	producer.iniciar();
+	consumer.iniciar();
 
 	// Esta linea detiene los hilos PERO NO LOS SINCRONIZA. Lo unico que
 	// hace es detener la ejecucion de su hilo principal, pero siguen
 	// abiertos los recursos.
-	producer->detener();
-	consumer->detener();
+	producer.detener();
+	consumer.detener();
 
 	// En estas lineas se sincronizan los hilos al hilo principal. Es el
 	// analogo a cerrar un archivo. Es de tener en cuenta que si los hilos
 	// no se detuvieron, el sincronizar va a esperar a que terminen con su
 	// tarea y luego sincronizara. Es bloqueante.
-	producer->sincronizar();
-	consumer->sincronizar();
+	producer.sincronizar();
+	consumer.sincronizar();
 	return 0;
 }

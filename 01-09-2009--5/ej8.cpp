@@ -10,7 +10,7 @@ int main(int argc, char* argv[]) {
 	Gtk::Main kit(argc, argv);	
 	Gtk::ComboBoxText combo;
 	
-	Glib::ustring str = "Línea ";
+	Glib::ustring str = "Combo ";
 	std::stringstream sstream;
 	for (int i = 1; i <= 10; ++i) {
 		sstream << i;
