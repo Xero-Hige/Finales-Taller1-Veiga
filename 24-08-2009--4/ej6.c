@@ -23,7 +23,10 @@ int main(int argc, char** argc) {
 	// una vez nombrado, procedemos a escuchar. El numero que acompaña al filedescriptor
 	// es la cantidad de conexiones en simultaneo que puede tener el servidor en la cola de espera
 	// elegimos arbitrariamente 5
-	int conexion = listen(fdsock, 5);
+	// NOTA: listen marca al socket como para ESCUCHAR, no devuelve un fd
+	listen(fdsock, 5);
+	// accept nos devuelve el fd de escuchar
+	int conexion = accept(fd, (struct sockaddr*)&direccion, sizeof(struct sockaddr));
 	// de aca en adelante vendria el codigo para poder recibir paquetes. Es un simple ciclo while, donde
 	// se reciba info con recv(fdsock, &buffer, sizeof(char), 0);
 } 
