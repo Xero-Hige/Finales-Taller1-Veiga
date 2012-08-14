@@ -2,10 +2,11 @@
 
 ¿Qué significa la palabra const cuando sucede a una declaración de un método de una clase? Ejemplifique.
 
-Prohibe la modificación del estado del objeto (sus atributos). Por un lado, si en el método se intentare modificar alguno de sus atributos, no compilaría. Por otro lado, sólo puede ser llamado desde objetos -o referencias a objetos- que sean constantes. Ejemplo:
+Prohibe la modificación del estado del objeto (sus atributos). Por un lado, si en el método se intentare modificar alguno de sus atributos, no compilaría. Por otro lado, son los únicos métodos que pueden ser llamados desde objetos -o referencias a objetos- que sean constantes. Ejemplo:
 
 class A {
 	public:
+		void algo();
 		int getValor() const;
 		void setValor(int i);
 	private:
@@ -18,8 +19,8 @@ int A::getValor() const {
 }
 
 // lo siguiente tampoco
-void foo(A& a) {
-	int valorDeA = a.getValor();
+void foo(const A& a) {
+	a.algo();
 }
 
 // lo siguiente sí:
